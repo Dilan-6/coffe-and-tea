@@ -1,12 +1,11 @@
 package coffeandtea;
 
-import javax.swing.JOptionPane;
+import view.MenuPrincipalView;
 
 public class CoffeAndTea {
 
     public static void main(String[] args) {
-
-        JOptionPane.showMessageDialog(null, "Santaigo es GAY");
+        new MenuPrincipalView().mostrarMenu();
     }
 
 }

@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package view;
 
-/**
- *
- * @author macbook
- */
+import javax.swing.JOptionPane;
+
+
 public class VentaView {
     
+    public void mostrar(){
+    
+        JOptionPane.showMessageDialog(null, "Hola desde ventas");
+    }
 }

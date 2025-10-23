@@ -6,7 +6,7 @@ public class CoffeAndTea {
 
     public static void main(String[] args) {
 
-        JOptionPane.showMessageDialog(null, "Santaigo es GAY");
+        JOptionPane.showMessageDialog(null, "Santaigo es____");
     }
 
 }

@@ -9,5 +9,10 @@ package repository;
  * @author macbook
  */
 public class ProductoRepository {
-    
+
+    String[] productos = {
+        "Leche", "Gaseosa"
+
+    };
+
 }

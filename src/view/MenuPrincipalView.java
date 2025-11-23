@@ -25,7 +25,7 @@ public class MenuPrincipalView {
                     new VentaView().mostrar();
                     break;
                 case 1:
-                    JOptionPane.showMessageDialog(null, "Abriendo módulo de Inventario...");
+                    new InventarioView().mostrarInventario();
                     break;
                 case 2:
                     JOptionPane.showMessageDialog(null, "Mostrando Historial de Ventas...");

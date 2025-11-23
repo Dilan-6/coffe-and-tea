@@ -11,7 +11,7 @@ public class InventarioView {
         int max_producto = 10;
         String[] nombre_producto = new String[max_producto], ficha_producto = new String[max_producto];
         String confirmacion = "", lista = "", modificacion = "", nuevoNombre = "", nuevoStock = "", nuevoMin = "", nuevoPrecio = "";
-        String IngresoStock, IngresoStockMin, IngresoPrecio, continuar = "";
+        String IngresoStock, IngresoStockMin, IngresoPrecio, continuar = "", modificarOp = "";
         double[] precio_unitario = new double[max_producto]; 
         int[] stock_actual = new int[max_producto];
         int[] stock_minimo = new int[max_producto];
@@ -204,8 +204,23 @@ public class InventarioView {
                 lista = lista + (i + 1) + ") " + ficha_producto[i] + "\n";
             }
 
-            modificarOpcion = Integer.parseInt(JOptionPane.showInputDialog(
-                    "¿Qué producto quiere modificar? \n" + lista));
+            modificarOp = JOptionPane.showInputDialog(
+                    "¿Qué producto quiere modificar? \n" + lista);
+            
+            if (modificarOp == null)
+            {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                break;
+            }
+            else if (modificarOp.trim().equals("") || !modificarOp.matches("\\d+"))
+            {
+                JOptionPane.showMessageDialog(null, "No se introdujo un valor valido");
+                break;
+            }
+            else 
+            {
+                modificarOpcion = Integer.parseInt(modificarOp);
+            }
 
             if (modificarOpcion < 1 || modificarOpcion > contador)
             {

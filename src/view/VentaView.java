@@ -127,7 +127,7 @@ public class VentaView {
                     );
                     break;
                 case 3:JOptionPane.showMessageDialog(null,
-                            "Hasta pronto");
+                            "Volviendo al menu principal");
                     break;
             }
 

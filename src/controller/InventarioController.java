@@ -247,8 +247,17 @@ public class InventarioController {
 
     private String construirListaProductos(List<Producto> productos) {
         StringBuilder lista = new StringBuilder();
+        lista.append("LISTA DE PRODUCTOS\n\n");
+        
         for (int i = 0; i < productos.size(); i++) {
-            lista.append((i + 1)).append(") ").append(productos.get(i).toString()).append("\n\n");
+            Producto producto = productos.get(i);
+            String nombre = producto.getNombre();
+            if (nombre.length() > 20) {
+                nombre = nombre.substring(0, 17) + "...";
+            }
+            lista.append(String.format("%2d. %-20s | Stock: %3d | Min: %3d | S/ %6.2f\n",
+                    i + 1, nombre, producto.getStockActual(), 
+                    producto.getStockMinimo(), producto.getPrecioUnitario()));
         }
         return lista.toString();
     }

@@ -221,9 +221,9 @@ public class VentaController {
 
         String listaCarrito = construirListaCarrito(detalles);
         JOptionPane.showMessageDialog(null,
-                "Carrito de Compras:\n\n" + listaCarrito +
-                        "─────────────────────────\n" +
-                        "TOTAL: S/ " + ventaActual.getTotal());
+                listaCarrito + "\n" +
+                "----------------------------------------\n" +
+                "TOTAL: S/ " + String.format("%.2f", ventaActual.getTotal()));
     }
 
     public void mostrarTotal() {
@@ -288,24 +288,31 @@ public class VentaController {
 
     private String construirListaProductosDisponibles(List<Producto> productos) {
         StringBuilder lista = new StringBuilder();
+        lista.append("PRODUCTOS DISPONIBLES:\n\n");
+        
         for (Producto producto : productos) {
-            lista.append("- ").append(producto.getNombre())
-                    .append(" | Precio: S/ ").append(producto.getPrecioUnitario())
-                    .append(" | Stock: ").append(producto.getStockActual())
-                    .append("\n");
+            String nombre = producto.getNombre();
+            if (nombre.length() > 25) {
+                nombre = nombre.substring(0, 22) + "...";
+            }
+            lista.append(String.format("- %-25s | S/ %6.2f | Stock: %3d\n",
+                    nombre, producto.getPrecioUnitario(), producto.getStockActual()));
         }
         return lista.toString();
     }
 
     private String construirListaCarrito(List<Venta.DetalleVenta> detalles) {
         StringBuilder lista = new StringBuilder();
+        lista.append("CARRITO DE COMPRAS:\n\n");
+        
         for (int i = 0; i < detalles.size(); i++) {
             Venta.DetalleVenta detalle = detalles.get(i);
-            lista.append((i + 1)).append(". ")
-                    .append(detalle.getProducto().getNombre())
-                    .append(" x").append(detalle.getCantidad())
-                    .append(" | S/ ").append(detalle.getSubtotal())
-                    .append("\n");
+            String nombre = detalle.getProducto().getNombre();
+            if (nombre.length() > 22) {
+                nombre = nombre.substring(0, 19) + "...";
+            }
+            lista.append(String.format("%2d. %-22s x%2d = S/ %7.2f\n",
+                    i + 1, nombre, detalle.getCantidad(), detalle.getSubtotal()));
         }
         return lista.toString();
     }

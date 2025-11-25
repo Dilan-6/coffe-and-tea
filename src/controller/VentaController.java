@@ -1,9 +1,12 @@
 package controller;
 
+import model.Boleta;
 import model.Producto;
 import model.Venta;
+import repository.BoletaRepository;
 import repository.ProductoRepository;
 import repository.VentaRepository;
+import utils.PrinterUtil;
 import utils.ValidatorsUtil;
 import javax.swing.JOptionPane;
 import java.util.List;
@@ -11,16 +14,18 @@ import java.util.List;
 public class VentaController {
     private ProductoRepository productoRepository;
     private VentaRepository ventaRepository;
+    private BoletaRepository boletaRepository;
     private Venta ventaActual;
 
     public VentaController() {
         this.productoRepository = ProductoRepository.getInstancia();
         this.ventaRepository = VentaRepository.getInstancia();
+        this.boletaRepository = BoletaRepository.getInstancia();
         this.ventaActual = new Venta();
     }
 
     public void mostrarMenuVentas() {
-        String[] opciones = { "Agregar producto", "Eliminar producto", "Mostrar carrito", "Mostrar total",
+        String[] opciones = { "Agregar producto", "Eliminar producto", "Ver carrito completo", "Mostrar carrito", "Mostrar total",
                 "Finalizar venta", "Salir" };
         int opcion;
 
@@ -43,15 +48,18 @@ public class VentaController {
                     eliminarProductoDelCarrito();
                     break;
                 case 2:
-                    mostrarCarrito();
+                    mostrarMenuCarritoCompleto();
                     break;
                 case 3:
-                    mostrarTotal();
+                    mostrarCarrito();
                     break;
                 case 4:
-                    finalizarVenta();
+                    mostrarTotal();
                     break;
                 case 5:
+                    finalizarVenta();
+                    break;
+                case 6:
                     if (ventaActual.getDetalles().isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
                     } else {
@@ -68,7 +76,7 @@ public class VentaController {
                     }
                     break;
             }
-        } while (opcion != 5 && opcion != JOptionPane.CLOSED_OPTION);
+        } while (opcion != 6 && opcion != JOptionPane.CLOSED_OPTION);
     }
 
     public void agregarProductoAlCarrito() {
@@ -243,9 +251,31 @@ public class VentaController {
         ventaActual.setCliente(cliente.trim().isEmpty() ? "Cliente General" : cliente);
 
         if (ventaRepository.agregarVenta(ventaActual)) {
-            String resumen = construirResumenVenta();
-            JOptionPane.showMessageDialog(null,
-                    "¡Venta finalizada exitosamente! ☕\n\n" + resumen);
+            String numeroBoleta = PrinterUtil.generarNumeroBoleta();
+            Boleta boleta = new Boleta(ventaActual, numeroBoleta);
+            boletaRepository.agregarBoleta(boleta);
+
+            String textoBoleta = PrinterUtil.imprimirBoleta(boleta);
+            
+            int opcion = JOptionPane.showOptionDialog(
+                    null,
+                    "¡Venta finalizada exitosamente! ☕\n\n" + 
+                    "¿Desea imprimir la boleta?",
+                    "Venta Finalizada",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[]{"Imprimir", "Solo ver"},
+                    "Imprimir");
+
+            if (opcion == JOptionPane.YES_OPTION || opcion == 0) {
+                PrinterUtil.imprimirEnDialogo("Boleta " + numeroBoleta, textoBoleta);
+                PrinterUtil.imprimirEnConsola("\n" + textoBoleta);
+            } else {
+                JOptionPane.showMessageDialog(null, 
+                        "Resumen de venta:\n\n" + construirResumenVenta() + 
+                        "\n\nNúmero de boleta: " + numeroBoleta);
+            }
 
             ventaActual = new Venta();
         } else {
@@ -302,5 +332,10 @@ public class VentaController {
         resumen.append("TOTAL: S/ ").append(ventaActual.getTotal());
 
         return resumen.toString();
+    }
+
+    public void mostrarMenuCarritoCompleto() {
+        view.CarritoView carritoView = new view.CarritoView(this);
+        carritoView.mostrarMenuCarrito();
     }
 }

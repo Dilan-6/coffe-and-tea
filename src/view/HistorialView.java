@@ -1,25 +1,27 @@
-
 package view;
 
+import controller.HistorialController;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import controller.HistorialController;
+
 
 public class HistorialView extends JFrame {
 
+    private HistorialController controller;
+
     public HistorialView() {
+        this.controller = new HistorialController();
+        inicializarComponentes();
+    }
 
-        setTitle("Historial (Solo Vista)");
+    private void inicializarComponentes() {
+        setTitle("Historial de Ventas");
         setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JButton btnVerHistorial = new JButton("Registrar Historial");
-
-        btnVerHistorial.addActionListener(e -> {
-            HistorialController controller = new HistorialController();
-            controller.registrarHistorial();
-        });
+        JButton btnVerHistorial = new JButton("Ver Historial Completo");
+        btnVerHistorial.addActionListener(e -> controller.mostrarMenuHistorial());
 
         JPanel panel = new JPanel();
         panel.add(btnVerHistorial);
@@ -27,5 +29,4 @@ public class HistorialView extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
 }

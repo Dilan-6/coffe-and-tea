@@ -1,6 +1,9 @@
 package view;
 
+import controller.FinanzasController;
+import controller.HistorialController;
 import javax.swing.JOptionPane;
+
 
 public class MenuPrincipalView {
 
@@ -27,18 +30,18 @@ public class MenuPrincipalView {
                     new InventarioView().mostrarInventario();
                     break;
                 case 2:
-                    JOptionPane.showMessageDialog(null, "Mostrando Historial de Ventas...");
+                    new HistorialController().mostrarMenuHistorial();
                     break;
                 case 3:
-                    JOptionPane.showMessageDialog(null, "Entrando a Finanzas...");
+                    new FinanzasController().mostrarMenuFinanzas();
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Hasta pronto ☕");
+                    if (opcion != JOptionPane.CLOSED_OPTION) {
+                        JOptionPane.showMessageDialog(null, "Hasta pronto ☕");
+                    }
                     break;
             }
 
         } while (opcion != 4 && opcion != JOptionPane.CLOSED_OPTION);
-
     }
-
 }

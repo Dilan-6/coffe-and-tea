@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 public class MenuPrincipalView {
 
     public void mostrarMenu() {
-        String[] opciones = {"Ventas", "Inventario", "Historial", "Finanzas"};
+        String[] opciones = { "Ventas", "Inventario", "Historial", "Finanzas" };
         int opcion;
 
         do {
@@ -17,8 +17,7 @@ public class MenuPrincipalView {
                     JOptionPane.INFORMATION_MESSAGE,
                     null,
                     opciones,
-                    opciones[0]
-            );
+                    opciones[0]);
 
             switch (opcion) {
                 case 0:

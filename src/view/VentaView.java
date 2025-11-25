@@ -3,14 +3,13 @@ package view;
 
 import javax.swing.JOptionPane;
 
-
 public class VentaView {
-    
-    public void mostrar(){
-    String[] inventario = {"cafe", "capuchino"};
-        double[] precio = {5, 8};
-        int[] stock = {4, 4};
-        String[]opciones = {"Agregar producto", "Eliminar producto", "Mostrar total", "Salir"};
+
+    public void mostrar() {
+        String[] inventario = { "cafe", "capuchino" };
+        double[] precio = { 5, 8 };
+        int[] stock = { 4, 4 };
+        String[] opciones = { "Agregar producto", "Eliminar producto", "Mostrar total", "Salir" };
 
         int[] vendido = new int[inventario.length];
 
@@ -42,22 +41,20 @@ public class VentaView {
                             int cantidad = Integer.parseInt(
                                     JOptionPane.showInputDialog(
                                             "Stock actual: " + stock[i]
-                                            + "\n¿Cuántas unidades desea?"
-                                    )
-                            );
+                                                    + "\n¿Cuántas unidades desea?"));
 
                             if (cantidad <= stock[i]) {
 
-                                stock[i] -= cantidad;   
-                                vendido[i] += cantidad; 
+                                stock[i] -= cantidad;
+                                vendido[i] += cantidad;
 
                                 double subtotal = cantidad * precio[i];
-                                total += subtotal;       
+                                total += subtotal;
 
                                 JOptionPane.showMessageDialog(null,
                                         "Agregado: " + cantidad + " " + inventario[i]
-                                        + "\nSubtotal: S/ " + subtotal
-                                        + "\nStock restante: " + stock[i]);
+                                                + "\nSubtotal: S/ " + subtotal
+                                                + "\nStock restante: " + stock[i]);
 
                             } else {
                                 JOptionPane.showMessageDialog(null,
@@ -90,22 +87,20 @@ public class VentaView {
                             int cantidadEliminar = Integer.parseInt(
                                     JOptionPane.showInputDialog(
                                             "Ha comprado: " + vendido[i]
-                                            + "\n¿Cuántas unidades desea eliminar?"
-                                    )
-                            );
+                                                    + "\n¿Cuántas unidades desea eliminar?"));
 
                             if (cantidadEliminar <= vendido[i]) {
 
-                                vendido[i] -= cantidadEliminar; 
-                                stock[i] += cantidadEliminar;    
+                                vendido[i] -= cantidadEliminar;
+                                stock[i] += cantidadEliminar;
 
                                 double resta = cantidadEliminar * precio[i];
-                                total -= resta;                
+                                total -= resta;
 
                                 JOptionPane.showMessageDialog(null,
                                         "Producto eliminado correctamente."
-                                        + "\nRestado del total: S/ " + resta
-                                        + "\nStock actual: " + stock[i]);
+                                                + "\nRestado del total: S/ " + resta
+                                                + "\nStock actual: " + stock[i]);
 
                             } else {
                                 JOptionPane.showMessageDialog(null,
@@ -119,22 +114,18 @@ public class VentaView {
                     }
 
                     break;
-                    
 
                 case 2:
                     JOptionPane.showMessageDialog(null,
-                            "El total de la compra es: S/ " + total
-                    );
+                            "El total de la compra es: S/ " + total);
                     break;
-                case 3:JOptionPane.showMessageDialog(null,
+                case 3:
+                    JOptionPane.showMessageDialog(null,
                             "Volviendo al menu principal");
                     break;
             }
 
         } while (opcion != 3 && opcion != JOptionPane.CLOSED_OPTION);
-        
-   
 
-      
     }
 }

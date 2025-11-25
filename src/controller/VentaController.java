@@ -25,7 +25,7 @@ public class VentaController {
     }
 
     public void mostrarMenuVentas() {
-        String[] opciones = { "Agregar producto", "Eliminar producto", "Ver carrito completo", "Mostrar carrito", "Mostrar total",
+        String[] opciones = { "Agregar producto", "Eliminar producto", "Mostrar carrito",
                 "Finalizar venta", "Salir" };
         int opcion;
 
@@ -48,18 +48,12 @@ public class VentaController {
                     eliminarProductoDelCarrito();
                     break;
                 case 2:
-                    mostrarMenuCarritoCompleto();
-                    break;
-                case 3:
                     mostrarCarrito();
                     break;
-                case 4:
-                    mostrarTotal();
-                    break;
-                case 5:
+                case 3:
                     finalizarVenta();
                     break;
-                case 6:
+                case 4:
                     if (ventaActual.getDetalles().isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
                     } else {
@@ -76,7 +70,7 @@ public class VentaController {
                     }
                     break;
             }
-        } while (opcion != 6 && opcion != JOptionPane.CLOSED_OPTION);
+        } while (opcion != 4 && opcion != JOptionPane.CLOSED_OPTION);
     }
 
     public void agregarProductoAlCarrito() {
@@ -334,8 +328,4 @@ public class VentaController {
         return resumen.toString();
     }
 
-    public void mostrarMenuCarritoCompleto() {
-        view.CarritoView carritoView = new view.CarritoView(this);
-        carritoView.mostrarMenuCarrito();
-    }
 }

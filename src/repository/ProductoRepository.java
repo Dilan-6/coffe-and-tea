@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class ProductoRepository {
     private static ProductoRepository instancia;
     private List<Producto> productos;
@@ -17,11 +16,6 @@ public class ProductoRepository {
         inicializarProductos();
     }
 
-    /**
-     * Obtiene la instancia única del repositorio (Singleton)
-     * 
-     * @return La instancia del repositorio
-     */
     public static synchronized ProductoRepository getInstancia() {
         if (instancia == null) {
             instancia = new ProductoRepository();
@@ -29,29 +23,41 @@ public class ProductoRepository {
         return instancia;
     }
 
-    /**
-     * Inicializa el repositorio con algunos productos de ejemplo
-     */
     private void inicializarProductos() {
-        agregarProducto(new Producto("Café", 10, 5, 5.0));
-        agregarProducto(new Producto("Capuchino", 8, 4, 8.0));
+        // Bebidas calientes
+        agregarProducto(new Producto("Café", 20, 10, 5.0));
+        agregarProducto(new Producto("Capuchino", 15, 8, 8.0));
+        agregarProducto(new Producto("Latte", 15, 8, 9.0));
+        agregarProducto(new Producto("Mocha", 12, 6, 10.0));
+        agregarProducto(new Producto("Té", 18, 10, 4.5));
+        agregarProducto(new Producto("Chocolate Caliente", 10, 5, 7.0));
+        agregarProducto(new Producto("Americano", 15, 8, 5.5));
+        agregarProducto(new Producto("Espresso", 20, 10, 4.0));
+
+        // Bebidas frías
+        agregarProducto(new Producto("Café Helado", 12, 6, 7.5));
+        agregarProducto(new Producto("Frappé", 10, 5, 9.5));
+        agregarProducto(new Producto("Limonada", 15, 8, 6.0));
+        agregarProducto(new Producto("Jugo de Naranja", 12, 6, 5.5));
+
+        // Postres
+        agregarProducto(new Producto("Brownie", 8, 4, 6.5));
+        agregarProducto(new Producto("Cheesecake", 6, 3, 12.0));
+        agregarProducto(new Producto("Muffin", 10, 5, 5.0));
+        agregarProducto(new Producto("Croissant", 12, 6, 4.5));
+        agregarProducto(new Producto("Torta de Chocolate", 5, 2, 15.0));
+        agregarProducto(new Producto("Alfajor", 15, 8, 3.5));
+
+        // Snacks
+        agregarProducto(new Producto("Sandwich", 10, 5, 8.0));
+        agregarProducto(new Producto("Galletas", 20, 10, 2.5));
+        agregarProducto(new Producto("Pan con Mantequilla", 15, 8, 3.0));
     }
 
-    /**
-     * Obtiene todos los productos
-     * 
-     * @return Lista de todos los productos
-     */
     public List<Producto> obtenerTodos() {
         return new ArrayList<>(productos);
     }
 
-    /**
-     * Busca un producto por su ID
-     * 
-     * @param id El ID del producto
-     * @return El producto encontrado o null si no existe
-     */
     public Producto buscarPorId(int id) {
         return productos.stream()
                 .filter(p -> p.getId() == id)
@@ -59,12 +65,6 @@ public class ProductoRepository {
                 .orElse(null);
     }
 
-    /**
-     * Busca un producto por su nombre (case insensitive)
-     * 
-     * @param nombre El nombre del producto
-     * @return El producto encontrado o null si no existe
-     */
     public Producto buscarPorNombre(String nombre) {
         return productos.stream()
                 .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
@@ -72,17 +72,10 @@ public class ProductoRepository {
                 .orElse(null);
     }
 
-    /**
-     * Agrega un nuevo producto al repositorio
-     * 
-     * @param producto El producto a agregar
-     * @return true si se agregó correctamente, false si ya existe un producto con ese nombre
-     */
     public boolean agregarProducto(Producto producto) {
         if (producto == null) {
             return false;
         }
-        // Verificar si ya existe un producto con el mismo nombre
         if (buscarPorNombre(producto.getNombre()) != null) {
             return false;
         }
@@ -91,12 +84,6 @@ public class ProductoRepository {
         return true;
     }
 
-    /**
-     * Actualiza un producto existente
-     * 
-     * @param producto El producto actualizado
-     * @return true si se actualizó correctamente, false si no existe
-     */
     public boolean actualizarProducto(Producto producto) {
         if (producto == null) {
             return false;
@@ -110,42 +97,20 @@ public class ProductoRepository {
         return false;
     }
 
-    /**
-     * Elimina un producto del repositorio
-     * 
-     * @param id El ID del producto a eliminar
-     * @return true si se eliminó correctamente, false si no existe
-     */
     public boolean eliminarProducto(int id) {
         return productos.removeIf(p -> p.getId() == id);
     }
 
-    /**
-     * Obtiene productos que necesitan reposición (stock por debajo del mínimo)
-     * 
-     * @return Lista de productos que necesitan reposición
-     */
     public List<Producto> obtenerProductosConStockBajo() {
         return productos.stream()
                 .filter(Producto::necesitaReposicion)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Verifica si existe un producto con el nombre dado
-     * 
-     * @param nombre El nombre a verificar
-     * @return true si existe, false en caso contrario
-     */
     public boolean existeProducto(String nombre) {
         return buscarPorNombre(nombre) != null;
     }
 
-    /**
-     * Obtiene el número total de productos
-     * 
-     * @return El número total de productos
-     */
     public int contarProductos() {
         return productos.size();
     }

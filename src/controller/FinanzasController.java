@@ -23,12 +23,26 @@ public class FinanzasController {
     public void mostrarMenuFinanzas() {
         int opcion;
         do {
-            opcion = Integer.parseInt(JOptionPane.showInputDialog(
+            String opcionStr = JOptionPane.showInputDialog(
                     "1. Ver ingresos por ventas\n" +
                             "2. Registrar ingreso\n" +
                             "3. Registrar egreso\n" +
                             "4. Ver resumen financiero\n" +
-                            "5. Salir"));
+                            "Presione Cancelar para salir");
+
+            if (opcionStr == null) {
+                // Usuario presionó Cancelar
+                JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
+                break;
+            }
+
+            try {
+                opcion = Integer.parseInt(opcionStr);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Opción inválida");
+                opcion = -1;
+                continue;
+            }
 
             switch (opcion) {
                 case 1:
@@ -43,14 +57,11 @@ public class FinanzasController {
                 case 4:
                     mostrarResumenFinanciero();
                     break;
-                case 5:
-                    JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
-                    break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción inválida");
                     break;
             }
-        } while (opcion != 5);
+        } while (true);
     }
 
     public void mostrarIngresosPorVentas() {

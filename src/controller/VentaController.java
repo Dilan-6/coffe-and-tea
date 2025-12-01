@@ -82,19 +82,27 @@ public class VentaController {
         }
 
         String listaProductos = construirListaProductosDisponibles(productos);
-        String nombreProducto = JOptionPane.showInputDialog(
-                "Productos disponibles:\n" + listaProductos + "\nIngrese el nombre del producto:");
+        String numeroStr = JOptionPane.showInputDialog(
+                "Productos disponibles:\n" + listaProductos + "\nIngrese el número del producto:");
 
-        if (nombreProducto == null || nombreProducto.trim().isEmpty()) {
+        if (numeroStr == null || numeroStr.trim().isEmpty()) {
             return;
         }
 
-        Producto producto = productoRepository.buscarPorNombre(nombreProducto.trim());
-
-        if (producto == null) {
-            JOptionPane.showMessageDialog(null, "Producto no encontrado");
+        if (!ValidatorsUtil.validarEnteroPositivo(numeroStr)) {
+            JOptionPane.showMessageDialog(null, "Número inválido. Debe ingresar un número válido.");
             return;
         }
+
+        int numero = Integer.parseInt(numeroStr);
+        int indice = numero - 1;
+
+        if (!ValidatorsUtil.validarRango(indice, 0, productos.size())) {
+            JOptionPane.showMessageDialog(null, "Número inválido. Debe seleccionar un producto de la lista.");
+            return;
+        }
+
+        Producto producto = productos.get(indice);
 
         if (producto.getStockActual() <= 0) {
             JOptionPane.showMessageDialog(null,
@@ -299,13 +307,14 @@ public class VentaController {
         StringBuilder lista = new StringBuilder();
         lista.append("PRODUCTOS DISPONIBLES:\n\n");
 
-        for (Producto producto : productos) {
+        for (int i = 0; i < productos.size(); i++) {
+            Producto producto = productos.get(i);
             String nombre = producto.getNombre();
             if (nombre.length() > 25) {
                 nombre = nombre.substring(0, 22) + "...";
             }
-            lista.append(String.format("- %-25s | S/ %6.2f | Stock: %3d\n",
-                    nombre, producto.getPrecioUnitario(), producto.getStockActual()));
+            lista.append(String.format("%2d. %-25s | S/ %6.2f | Stock: %3d\n",
+                    i + 1, nombre, producto.getPrecioUnitario(), producto.getStockActual()));
         }
         return lista.toString();
     }

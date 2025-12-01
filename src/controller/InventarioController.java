@@ -16,12 +16,25 @@ public class InventarioController {
     public void mostrarMenuInventario() {
         int opcion;
         do {
-            opcion = Integer.parseInt(JOptionPane.showInputDialog(
+            String opcionStr = JOptionPane.showInputDialog(
                     "1. Agregar producto\n" +
                             "2. Modificar producto\n" +
                             "3. Ver productos\n" +
                             "4. Ver productos con stock bajo\n" +
-                            "5. Salir"));
+                            "Presione Cancelar para salir");
+
+            if (opcionStr == null) {
+                JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
+                break;
+            }
+
+            try {
+                opcion = Integer.parseInt(opcionStr);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Opción inválida");
+                opcion = -1;
+                continue;
+            }
 
             switch (opcion) {
                 case 1:
@@ -36,14 +49,11 @@ public class InventarioController {
                 case 4:
                     mostrarProductosConStockBajo();
                     break;
-                case 5:
-                    JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
-                    break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción inválida");
                     break;
             }
-        } while (opcion != 5);
+        } while (true);
     }
 
     public void agregarProducto() {

@@ -16,12 +16,26 @@ public class HistorialController {
     public void mostrarMenuHistorial() {
         int opcion;
         do {
-            opcion = Integer.parseInt(JOptionPane.showInputDialog(
+            String opcionStr = JOptionPane.showInputDialog(
                     "1. Ver todas las ventas\n" +
                             "2. Ver últimas ventas\n" +
                             "3. Buscar venta por ID\n" +
                             "4. Ver estadísticas\n" +
-                            "5. Salir"));
+                            "Presione Cancelar para salir");
+
+            if (opcionStr == null) {
+                // Usuario presionó Cancelar
+                JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
+                break;
+            }
+
+            try {
+                opcion = Integer.parseInt(opcionStr);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Opción inválida");
+                opcion = -1;
+                continue;
+            }
 
             switch (opcion) {
                 case 1:
@@ -36,14 +50,11 @@ public class HistorialController {
                 case 4:
                     mostrarEstadisticas();
                     break;
-                case 5:
-                    JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
-                    break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción inválida");
                     break;
             }
-        } while (opcion != 5);
+        } while (true);
     }
 
     public void mostrarTodasLasVentas() {

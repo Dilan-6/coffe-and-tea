@@ -5,24 +5,27 @@ public class Producto {
     private String nombre;
     private int stockActual;
     private int stockMinimo;
-    private double precioUnitario;
+    private double precioUnitario; 
+    private double precioCosto; 
 
     public Producto() {
     }
 
-    public Producto(String nombre, int stockActual, int stockMinimo, double precioUnitario) {
+    public Producto(String nombre, int stockActual, int stockMinimo, double precioUnitario, double precioCosto) {
         this.nombre = nombre;
         this.stockActual = stockActual;
         this.stockMinimo = stockMinimo;
         this.precioUnitario = precioUnitario;
+        this.precioCosto = precioCosto;
     }
 
-    public Producto(int id, String nombre, int stockActual, int stockMinimo, double precioUnitario) {
+    public Producto(int id, String nombre, int stockActual, int stockMinimo, double precioUnitario, double precioCosto) {
         this.id = id;
         this.nombre = nombre;
         this.stockActual = stockActual;
         this.stockMinimo = stockMinimo;
         this.precioUnitario = precioUnitario;
+        this.precioCosto = precioCosto;
     }
 
     public int getId() {
@@ -65,6 +68,14 @@ public class Producto {
         this.precioUnitario = precioUnitario;
     }
 
+    public double getPrecioCosto() {
+        return precioCosto;
+    }
+
+    public void setPrecioCosto(double precioCosto) {
+        this.precioCosto = precioCosto;
+    }
+
     public boolean necesitaReposicion() {
         return stockActual < stockMinimo;
     }
@@ -88,6 +99,7 @@ public class Producto {
         return "Nombre: " + nombre + "\n" +
                 "Stock actual: " + stockActual + "\n" +
                 "Stock mínimo: " + stockMinimo + "\n" +
-                "Precio unitario: " + precioUnitario;
+                "Precio venta: " + precioUnitario + "\n" +
+                "Precio costo: " + precioCosto;
     }
 }

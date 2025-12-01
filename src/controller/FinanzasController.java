@@ -2,6 +2,7 @@ package controller;
 
 import model.Egreso;
 import model.Ingreso;
+import model.Venta;
 import repository.VentaRepository;
 import utils.ValidatorsUtil;
 import javax.swing.JOptionPane;
@@ -116,21 +117,37 @@ public class FinanzasController {
     }
 
     public void mostrarResumenFinanciero() {
+        List<Venta> ventas = ventaRepository.obtenerTodas();
         double totalVentas = ventaRepository.calcularTotalVentas();
+        double totalCostoVentas = calcularCostoTotalVentas();
         double totalIngresos = calcularTotalIngresos();
-        double totalEgresos = calcularTotalEgresos();
-        double balance = totalVentas + totalIngresos - totalEgresos;
+        double totalEgresosManuales = calcularTotalEgresos();
+        double gananciaBruta = totalVentas - totalCostoVentas;
+        double balance = totalVentas + totalIngresos - totalCostoVentas - totalEgresosManuales;
 
-        StringBuilder resumen = new StringBuilder();
-        resumen.append("RESUMEN FINANCIERO\n\n");
-        resumen.append("Ingresos por ventas: S/ ").append(totalVentas).append("\n");
-        resumen.append("Otros ingresos: S/ ").append(totalIngresos).append("\n");
-        resumen.append("Total ingresos: S/ ").append(totalVentas + totalIngresos).append("\n\n");
-        resumen.append("Egresos: S/ ").append(totalEgresos).append("\n\n");
-        resumen.append("─────────────────────────\n");
-        resumen.append("BALANCE: S/ ").append(balance);
+        StringBuilder registro = new StringBuilder();
+        registro.append("REGISTRO FINANCIERO\n");
+        registro.append("═══════════════════════════════════════\n\n");
 
-        JOptionPane.showMessageDialog(null, resumen.toString());
+        registro.append("INGRESOS:\n");
+        registro.append("─────────────────────────────────────\n");
+        registro.append("Ventas realizadas: ").append(ventas.size()).append("\n");
+        registro.append("Total ingresos por ventas: S/ ").append(String.format("%.2f", totalVentas)).append("\n");
+        registro.append("Otros ingresos: S/ ").append(String.format("%.2f", totalIngresos)).append("\n");
+        registro.append("TOTAL INGRESOS: S/ ").append(String.format("%.2f", totalVentas + totalIngresos)).append("\n\n");
+
+        registro.append("EGRESOS:\n");
+        registro.append("─────────────────────────────────────\n");
+        registro.append("Costo de productos vendidos: S/ ").append(String.format("%.2f", totalCostoVentas)).append("\n");
+        registro.append("Egresos manuales registrados: S/ ").append(String.format("%.2f", totalEgresosManuales)).append("\n");
+        registro.append("TOTAL EGRESOS: S/ ").append(String.format("%.2f", totalCostoVentas + totalEgresosManuales)).append("\n\n");
+
+        registro.append("RESUMEN:\n");
+        registro.append("─────────────────────────────────────\n");
+        registro.append("Ganancia bruta (Ventas - Costos): S/ ").append(String.format("%.2f", gananciaBruta)).append("\n");
+        registro.append("BALANCE FINAL: S/ ").append(String.format("%.2f", balance)).append("\n");
+
+        JOptionPane.showMessageDialog(null, registro.toString());
     }
 
     private double calcularTotalIngresos() {
@@ -143,5 +160,20 @@ public class FinanzasController {
         return egresos.stream()
                 .mapToDouble(Egreso::getMonto)
                 .sum();
+    }
+
+    private double calcularCostoTotalVentas() {
+        List<Venta> ventas = ventaRepository.obtenerTodas();
+        double costoTotal = 0.0;
+
+        for (Venta venta : ventas) {
+            for (Venta.DetalleVenta detalle : venta.getDetalles()) {
+                double precioCosto = detalle.getProducto().getPrecioCosto();
+                int cantidad = detalle.getCantidad();
+                costoTotal += precioCosto * cantidad;
+            }
+        }
+
+        return costoTotal;
     }
 }

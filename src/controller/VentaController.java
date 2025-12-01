@@ -222,8 +222,8 @@ public class VentaController {
         String listaCarrito = construirListaCarrito(detalles);
         JOptionPane.showMessageDialog(null,
                 listaCarrito + "\n" +
-                "----------------------------------------\n" +
-                "TOTAL: S/ " + String.format("%.2f", ventaActual.getTotal()));
+                        "----------------------------------------\n" +
+                        "TOTAL: S/ " + String.format("%.2f", ventaActual.getTotal()));
     }
 
     public void mostrarTotal() {
@@ -234,7 +234,8 @@ public class VentaController {
 
     public void finalizarVenta() {
         if (ventaActual.getDetalles().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay productos en el carrito.");
+            JOptionPane.showMessageDialog(null,
+                    "No hay productos en el carrito.\nAgregue productos antes de finalizar la venta.");
             return;
         }
 
@@ -244,34 +245,42 @@ public class VentaController {
         }
         ventaActual.setCliente(cliente.trim().isEmpty() ? "Cliente General" : cliente);
 
-        if (ventaRepository.agregarVenta(ventaActual)) {
+        Venta ventaFinalizada = new Venta();
+        ventaFinalizada.setCliente(ventaActual.getCliente());
+        ventaFinalizada.setFecha(ventaActual.getFecha());
+        for (Venta.DetalleVenta detalle : ventaActual.getDetalles()) {
+            ventaFinalizada.agregarDetalle(new Venta.DetalleVenta(detalle.getProducto(), detalle.getCantidad()));
+        }
+
+        if (ventaRepository.agregarVenta(ventaFinalizada)) {
             String numeroBoleta = PrinterUtil.generarNumeroBoleta();
-            Boleta boleta = new Boleta(ventaActual, numeroBoleta);
+            Boleta boleta = new Boleta(ventaFinalizada, numeroBoleta);
             boletaRepository.agregarBoleta(boleta);
 
             String textoBoleta = PrinterUtil.imprimirBoleta(boleta);
-            
+
             int opcion = JOptionPane.showOptionDialog(
                     null,
-                    "¡Venta finalizada exitosamente! ☕\n\n" + 
-                    "¿Desea imprimir la boleta?",
+                    "¡Venta finalizada exitosamente! ☕\n\n" +
+                            "¿Desea imprimir la boleta?",
                     "Venta Finalizada",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
-                    new String[]{"Imprimir", "Solo ver"},
+                    new String[] { "Imprimir", "Solo ver" },
                     "Imprimir");
 
             if (opcion == JOptionPane.YES_OPTION || opcion == 0) {
                 PrinterUtil.imprimirEnDialogo("Boleta " + numeroBoleta, textoBoleta);
                 PrinterUtil.imprimirEnConsola("\n" + textoBoleta);
             } else {
-                JOptionPane.showMessageDialog(null, 
-                        "Resumen de venta:\n\n" + construirResumenVenta() + 
-                        "\n\nNúmero de boleta: " + numeroBoleta);
+                JOptionPane.showMessageDialog(null,
+                        "Resumen de venta:\n\n" + construirResumenVenta(ventaFinalizada) +
+                                "\n\nNúmero de boleta: " + numeroBoleta);
             }
 
             ventaActual = new Venta();
+            JOptionPane.showMessageDialog(null, "Carrito reiniciado. Puede comenzar una nueva venta.");
         } else {
             JOptionPane.showMessageDialog(null, "Error al finalizar la venta.");
         }
@@ -289,7 +298,7 @@ public class VentaController {
     private String construirListaProductosDisponibles(List<Producto> productos) {
         StringBuilder lista = new StringBuilder();
         lista.append("PRODUCTOS DISPONIBLES:\n\n");
-        
+
         for (Producto producto : productos) {
             String nombre = producto.getNombre();
             if (nombre.length() > 25) {
@@ -304,7 +313,7 @@ public class VentaController {
     private String construirListaCarrito(List<Venta.DetalleVenta> detalles) {
         StringBuilder lista = new StringBuilder();
         lista.append("CARRITO DE COMPRAS:\n\n");
-        
+
         for (int i = 0; i < detalles.size(); i++) {
             Venta.DetalleVenta detalle = detalles.get(i);
             String nombre = detalle.getProducto().getNombre();
@@ -317,12 +326,12 @@ public class VentaController {
         return lista.toString();
     }
 
-    private String construirResumenVenta() {
+    private String construirResumenVenta(Venta venta) {
         StringBuilder resumen = new StringBuilder();
-        resumen.append("Cliente: ").append(ventaActual.getCliente()).append("\n\n");
+        resumen.append("Cliente: ").append(venta.getCliente()).append("\n\n");
         resumen.append("Productos:\n");
 
-        for (Venta.DetalleVenta detalle : ventaActual.getDetalles()) {
+        for (Venta.DetalleVenta detalle : venta.getDetalles()) {
             resumen.append("- ").append(detalle.getProducto().getNombre())
                     .append(" x").append(detalle.getCantidad())
                     .append(" | S/ ").append(detalle.getSubtotal())
@@ -330,7 +339,7 @@ public class VentaController {
         }
 
         resumen.append("\n─────────────────────────\n");
-        resumen.append("TOTAL: S/ ").append(ventaActual.getTotal());
+        resumen.append("TOTAL: S/ ").append(venta.getTotal());
 
         return resumen.toString();
     }

@@ -49,10 +49,9 @@ public class InventarioController {
     public void agregarProducto() {
         String nombre = solicitarNombreProducto();
         if (nombre == null) {
-            return; // Usuario canceló
+            return;
         }
 
-        // Verificar si ya existe
         if (productoRepository.existeProducto(nombre)) {
             JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
             return;
@@ -60,20 +59,25 @@ public class InventarioController {
 
         int stockActual = solicitarStock("Ingrese el stock actual");
         if (stockActual < 0) {
-            return; // Usuario canceló o valor inválido
+            return;
         }
 
         int stockMinimo = solicitarStock("Ingrese el stock mínimo");
         if (stockMinimo < 0) {
-            return; // Usuario canceló o valor inválido
+            return;
         }
 
-        double precio = solicitarPrecio();
-        if (precio < 0) {
-            return; // Usuario canceló o valor inválido
+        double precioVenta = solicitarPrecio("Ingrese el precio de venta");
+        if (precioVenta < 0) {
+            return;
         }
 
-        Producto producto = new Producto(nombre, stockActual, stockMinimo, precio);
+        double precioCosto = solicitarPrecio("Ingrese el precio de costo");
+        if (precioCosto < 0) {
+            return;
+        }
+
+        Producto producto = new Producto(nombre, stockActual, stockMinimo, precioVenta, precioCosto);
 
         if (productoRepository.agregarProducto(producto)) {
             JOptionPane.showMessageDialog(null,
@@ -91,7 +95,6 @@ public class InventarioController {
             return;
         }
 
-        // Mostrar lista de productos
         String lista = construirListaProductos(productos);
         String opcionStr = JOptionPane.showInputDialog(
                 "¿Qué producto quiere modificar?\n" + lista);
@@ -113,7 +116,7 @@ public class InventarioController {
 
     private void modificarAtributoProducto(Producto producto) {
         String modificacion = JOptionPane.showInputDialog(
-                "¿Qué parte quiere modificar?\n(nombre / stock / minimo / precio)\n\n" +
+                "¿Qué parte quiere modificar?\n(nombre / stock / minimo / precio / costo)\n\n" +
                         producto.toString());
 
         if (modificacion == null) {
@@ -153,7 +156,7 @@ public class InventarioController {
                 break;
 
             case "precio":
-                double nuevoPrecio = solicitarPrecio();
+                double nuevoPrecio = solicitarPrecio("Introduzca nuevo precio de venta");
                 if (nuevoPrecio >= 0) {
                     producto.setPrecioUnitario(nuevoPrecio);
                     productoRepository.actualizarProducto(producto);
@@ -162,9 +165,19 @@ public class InventarioController {
                 }
                 break;
 
+            case "costo":
+                double nuevoCosto = solicitarPrecio("Introduzca nuevo precio de costo");
+                if (nuevoCosto >= 0) {
+                    producto.setPrecioCosto(nuevoCosto);
+                    productoRepository.actualizarProducto(producto);
+                    JOptionPane.showMessageDialog(null,
+                            "Producto modificado correctamente.\n" + producto.toString());
+                }
+                break;
+
             default:
                 JOptionPane.showMessageDialog(null,
-                        "Opción no válida.\nSolo se acepta:\n- nombre\n- stock\n- minimo\n- precio");
+                        "Opción no válida.\nSolo se acepta:\n- nombre\n- stock\n- minimo\n- precio\n- costo");
                 break;
         }
     }
@@ -199,7 +212,7 @@ public class InventarioController {
             nombre = JOptionPane.showInputDialog("Ingrese el nombre del producto");
 
             if (nombre == null) {
-                return null; // Usuario canceló
+                return null;
             }
 
             if (!ValidatorsUtil.validarNombreProducto(nombre)) {
@@ -217,7 +230,7 @@ public class InventarioController {
             stockStr = JOptionPane.showInputDialog(mensaje);
 
             if (stockStr == null) {
-                return -1; // Usuario canceló
+                return -1;
             }
 
             if (!ValidatorsUtil.validarEnteroPositivo(stockStr)) {
@@ -228,13 +241,13 @@ public class InventarioController {
         return Integer.parseInt(stockStr);
     }
 
-    private double solicitarPrecio() {
+    private double solicitarPrecio(String mensaje) {
         String precioStr;
         do {
-            precioStr = JOptionPane.showInputDialog("Ingrese el precio unitario");
+            precioStr = JOptionPane.showInputDialog(mensaje);
 
             if (precioStr == null) {
-                return -1.0; // Usuario canceló
+                return -1.0;
             }
 
             if (!ValidatorsUtil.validarDecimalPositivo(precioStr)) {
@@ -248,16 +261,16 @@ public class InventarioController {
     private String construirListaProductos(List<Producto> productos) {
         StringBuilder lista = new StringBuilder();
         lista.append("LISTA DE PRODUCTOS\n\n");
-        
+
         for (int i = 0; i < productos.size(); i++) {
             Producto producto = productos.get(i);
             String nombre = producto.getNombre();
-            if (nombre.length() > 20) {
-                nombre = nombre.substring(0, 17) + "...";
+            if (nombre.length() > 18) {
+                nombre = nombre.substring(0, 15) + "...";
             }
-            lista.append(String.format("%2d. %-20s | Stock: %3d | Min: %3d | S/ %6.2f\n",
-                    i + 1, nombre, producto.getStockActual(), 
-                    producto.getStockMinimo(), producto.getPrecioUnitario()));
+            lista.append(String.format("%2d. %-18s | Stock: %3d | Min: %3d | Venta: S/ %6.2f | Costo: S/ %6.2f\n",
+                    i + 1, nombre, producto.getStockActual(),
+                    producto.getStockMinimo(), producto.getPrecioUnitario(), producto.getPrecioCosto()));
         }
         return lista.toString();
     }

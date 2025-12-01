@@ -24,34 +24,34 @@ public class ProductoRepository {
     }
 
     private void inicializarProductos() {
-        // Bebidas calientes
-        agregarProducto(new Producto("Café", 20, 10, 5.0));
-        agregarProducto(new Producto("Capuchino", 15, 8, 8.0));
-        agregarProducto(new Producto("Latte", 15, 8, 9.0));
-        agregarProducto(new Producto("Mocha", 12, 6, 10.0));
-        agregarProducto(new Producto("Té", 18, 10, 4.5));
-        agregarProducto(new Producto("Chocolate Caliente", 10, 5, 7.0));
-        agregarProducto(new Producto("Americano", 15, 8, 5.5));
-        agregarProducto(new Producto("Espresso", 20, 10, 4.0));
+        // Bebidas calientes (precio costo aproximado: 60% del precio de venta)
+        agregarProducto(new Producto("Café", 20, 10, 5.0, 3.0));
+        agregarProducto(new Producto("Capuchino", 15, 8, 8.0, 4.8));
+        agregarProducto(new Producto("Latte", 15, 8, 9.0, 5.4));
+        agregarProducto(new Producto("Mocha", 12, 6, 10.0, 6.0));
+        agregarProducto(new Producto("Té", 18, 10, 4.5, 2.7));
+        agregarProducto(new Producto("Chocolate Caliente", 10, 5, 7.0, 4.2));
+        agregarProducto(new Producto("Americano", 15, 8, 5.5, 3.3));
+        agregarProducto(new Producto("Espresso", 20, 10, 4.0, 2.4));
 
         // Bebidas frías
-        agregarProducto(new Producto("Café Helado", 12, 6, 7.5));
-        agregarProducto(new Producto("Frappé", 10, 5, 9.5));
-        agregarProducto(new Producto("Limonada", 15, 8, 6.0));
-        agregarProducto(new Producto("Jugo de Naranja", 12, 6, 5.5));
+        agregarProducto(new Producto("Café Helado", 12, 6, 7.5, 4.5));
+        agregarProducto(new Producto("Frappé", 10, 5, 9.5, 5.7));
+        agregarProducto(new Producto("Limonada", 15, 8, 6.0, 3.6));
+        agregarProducto(new Producto("Jugo de Naranja", 12, 6, 5.5, 3.3));
 
         // Postres
-        agregarProducto(new Producto("Brownie", 8, 4, 6.5));
-        agregarProducto(new Producto("Cheesecake", 6, 3, 12.0));
-        agregarProducto(new Producto("Muffin", 10, 5, 5.0));
-        agregarProducto(new Producto("Croissant", 12, 6, 4.5));
-        agregarProducto(new Producto("Torta de Chocolate", 5, 2, 15.0));
-        agregarProducto(new Producto("Alfajor", 15, 8, 3.5));
+        agregarProducto(new Producto("Brownie", 8, 4, 6.5, 3.9));
+        agregarProducto(new Producto("Cheesecake", 6, 3, 12.0, 7.2));
+        agregarProducto(new Producto("Muffin", 10, 5, 5.0, 3.0));
+        agregarProducto(new Producto("Croissant", 12, 6, 4.5, 2.7));
+        agregarProducto(new Producto("Torta de Chocolate", 5, 2, 15.0, 9.0));
+        agregarProducto(new Producto("Alfajor", 15, 8, 3.5, 2.1));
 
         // Snacks
-        agregarProducto(new Producto("Sandwich", 10, 5, 8.0));
-        agregarProducto(new Producto("Galletas", 20, 10, 2.5));
-        agregarProducto(new Producto("Pan con Mantequilla", 15, 8, 3.0));
+        agregarProducto(new Producto("Sandwich", 10, 5, 8.0, 4.8));
+        agregarProducto(new Producto("Galletas", 20, 10, 2.5, 1.5));
+        agregarProducto(new Producto("Pan con Mantequilla", 15, 8, 3.0, 1.8));
     }
 
     public List<Producto> obtenerTodos() {

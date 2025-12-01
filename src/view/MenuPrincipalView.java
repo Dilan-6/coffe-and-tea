@@ -1,7 +1,5 @@
 package view;
 
-import controller.FinanzasController;
-import controller.HistorialController;
 import javax.swing.JOptionPane;
 
 
@@ -30,10 +28,10 @@ public class MenuPrincipalView {
                     new InventarioView().mostrarInventario();
                     break;
                 case 2:
-                    new HistorialController().mostrarMenuHistorial();
+                    new HistorialView().mostrar();
                     break;
                 case 3:
-                    new FinanzasController().mostrarMenuFinanzas();
+                    new FinanzasView().mostrar();
                     break;
                 default:
                     if (opcion != JOptionPane.CLOSED_OPTION) {

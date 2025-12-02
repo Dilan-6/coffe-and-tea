@@ -31,7 +31,7 @@ public class FinanzasController {
                             "Presione Cancelar para salir");
 
             if (opcionStr == null) {
-                // Usuario presionó Cancelar
+                
                 JOptionPane.showMessageDialog(null, "Volviendo al menú principal");
                 break;
             }

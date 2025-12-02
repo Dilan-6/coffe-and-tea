@@ -26,7 +26,7 @@ public class Ingreso {
         this.fecha = new Date();
     }
 
-    public int getId() {
+    public int getId()  {
         return id;
     }
 
